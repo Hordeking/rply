@@ -73,8 +73,8 @@ In practice, the library works with all PLY files that I could find.  </p>
 <h2>Download</h2>
 
 <p>
-Version 1.1 of RPly is available for download in source
-code from <a href=rply-1.1.tar.gz>this link</a>. Examples and documentation 
+Version 1.1.1 of RPly is available for download in source
+code from <a href=rply-1.1.1.tar.gz>this link</a>. Examples and documentation 
 are packed inside the tar ball. Have fun!
 </p>
 
@@ -89,8 +89,9 @@ Author: <A href="http://www.impa.br/~diego">Diego Nehab</a>
 <li> Support for 64-bit architectures using C99's
 <tt>&lt;stdint.h&gt;</tt>;
 <li> Support for the LF, CR+LF, and CR end-of-line conventions in ASCII PLY files;
-<li> Support for (broken) ASCII PLY files that do end with a end-of-line marker;
-<li> Error callback now receives the PLY handle.
+<li> Support for (broken) ASCII PLY files that don't end with a end-of-line marker;
+<li> Error callback now receives the PLY handle from which user data can be obtained.
+<li> Manual updated to describe these changes.
 </ul>
 
 <h2> RPly's idea of what a PLY file is </h2>
@@ -425,7 +426,7 @@ setlocale(LC_NUMERIC, old_locale);
 <!-- ply_open ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
 <p class=name id=ply_open>
-p_ply <b>ply_open</b>(const char *name, p_ply_error_cb error_cb)
+p_ply <b>ply_open</b>(const char *name, p_ply_error_cb error_cb, long idata, void *pdata)
 </p>
 
 <p class=description>
@@ -436,6 +437,10 @@ and returns a handle to it.
 <p class=arguments>
 <tt>Name</tt> is the file name, and <tt>error_cb</tt> is a function to
 be called when an error is found. 
+Arguments <tt>idata</tt>
+and <tt>pdata</tt> are available to the error callback via the
+<a href=#ply_get_ply_user_data><tt>ply_get_ply_user_data</tt></a> 
+function.  
 If <tt>error_cb</tt> is NULL, the default
 error callback is used. It prints a message to the standard error stream.
 </p>
@@ -448,6 +453,28 @@ Returns a handle to the file or NULL on error.
 Note: <tt>Error_cb</tt> is of type <tt>void
     (*p_ply_error_cb)(p_ply ply, const char *message)</tt>.
 </p>
+
+<!-- ply_get_ply_user_data ++++++++++++++++++++++++++++++++++++++++ -->
+
+<p class=name id=ply_get_ply_user_data>
+int <b>ply_get_ply_user_data</b>(p_ply_ply ply, void *pdata, long *idata)
+</p>
+
+<p class=description>
+Retrieves user data from the ply handle. 
+</p>
+
+<p class=arguments>
+<tt>Ply</tt> is the handle passed to the error callback.
+<tt>Pdata</tt> receives the user data pointer.
+<tt>Idata</tt> receives the user data integer.
+<tt>Pdata</tt> and <tt>idata</tt> can be NULL.
+</p>
+
+<p class=return>
+Returns 1 in case of success, 0 otherwise. 
+</p>
+
 
 <!-- ply_read_header +++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
@@ -803,7 +830,14 @@ Creates a PLY file for writing.
 
 <p class=arguments>
 <tt>Name</tt> is the file name, <tt>storage_mode</tt> is the file storage mode
-(<tt>PLY_ASCII</tt>, <tt>PLY_LITTLE_ENDIAN</tt> or <tt>PLY_BIG_ENDIAN</tt>). <tt>Error_cb</tt> is a function to be called when an error is found. 
+(<tt>PLY_ASCII</tt>, <tt>PLY_LITTLE_ENDIAN</tt>,
+<tt>PLY_BIG_ENDIAN</tt>, or <tt>PLY_DEFAULT</tt> to
+automatically detect host endianess). 
+<tt>Error_cb</tt> is a function to be called when an error is found. 
+Arguments <tt>idata</tt>
+and <tt>pdata</tt> are available to the error callback via the
+<a href=#ply_get_ply_user_data><tt>ply_get_ply_user_data</tt></a> 
+function.  
 If <tt>error_cb</tt> is NULL, the default
 error callback is used. It prints a message to the standard error stream.
 </p>
@@ -1017,7 +1051,7 @@ Returns 1 in case of success, 0 otherwise.
 <p>
 <small>
 Last modified by Diego Nehab on <br>
-Sun Sep 11 22:00:43 BRT 2011
+Tue Oct  4 18:47:20 BRT 2011
 </small>
 </p>
 </center>

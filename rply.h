@@ -1,5 +1,5 @@
-#ifndef RPLY_H
-#define RPLY_H
+#ifndef PLY_H
+#define PLY_H
 /* ----------------------------------------------------------------------
  * RPly library, read/write PLY files
  * Diego Nehab, IMPA
@@ -13,7 +13,7 @@
 extern "C" {
 #endif
 
-#define RPLY_VERSION   "RPly 0.9.0"
+#define RPLY_VERSION   "RPly 1.1.1"
 #define RPLY_COPYRIGHT "Copyright (C) 2003-2011 Diego Nehab"
 #define RPLY_AUTHORS   "Diego Nehab"
 
@@ -50,6 +50,14 @@ typedef enum e_ply_type {
  * ply: handle returned by ply_open or ply_create
  * ---------------------------------------------------------------------- */
 typedef void (*p_ply_error_cb)(p_ply ply, const char *message);
+
+/* ----------------------------------------------------------------------
+ * Gets user data from within an error callback 
+ *
+ * ply: handle returned by ply_open or ply_create
+ * idata,pdata: contextual information set in ply_open or ply_create
+ * ---------------------------------------------------------------------- */
+int ply_get_ply_user_data(p_ply ply, void **pdata, long *idata);
 
 /* ----------------------------------------------------------------------
  * Opens a PLY file for reading (fails if file is not a PLY file)
