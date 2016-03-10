@@ -13,8 +13,8 @@
 extern "C" {
 #endif
 
-#define RPLY_VERSION   "RPly 1.1.3"
-#define RPLY_COPYRIGHT "Copyright (C) 2003-2013 Diego Nehab"
+#define RPLY_VERSION   "RPly 1.1.4"
+#define RPLY_COPYRIGHT "Copyright (C) 2003-2015 Diego Nehab"
 #define RPLY_AUTHORS   "Diego Nehab"
 
 /* ----------------------------------------------------------------------
@@ -30,13 +30,13 @@ typedef struct t_ply_argument_ *p_ply_argument;
 typedef enum e_ply_storage_mode_ {
     PLY_BIG_ENDIAN,
     PLY_LITTLE_ENDIAN,
-    PLY_ASCII,   
+    PLY_ASCII,
     PLY_DEFAULT      /* has to be the last in enum */
 } e_ply_storage_mode; /* order matches ply_storage_mode_list */
 
 /* ply data type */
 typedef enum e_ply_type {
-    PLY_INT8, PLY_UINT8, PLY_INT16, PLY_UINT16, 
+    PLY_INT8, PLY_UINT8, PLY_INT16, PLY_UINT16,
     PLY_INT32, PLY_UIN32, PLY_FLOAT32, PLY_FLOAT64,
     PLY_CHAR, PLY_UCHAR, PLY_SHORT, PLY_USHORT,
     PLY_INT, PLY_UINT, PLY_FLOAT, PLY_DOUBLE,
@@ -52,7 +52,7 @@ typedef enum e_ply_type {
 typedef void (*p_ply_error_cb)(p_ply ply, const char *message);
 
 /* ----------------------------------------------------------------------
- * Gets user data from within an error callback 
+ * Gets user data from within an error callback
  *
  * ply: handle returned by ply_open or ply_create
  * idata,pdata: contextual information set in ply_open or ply_create
@@ -98,16 +98,16 @@ typedef int (*p_ply_read_cb)(p_ply_argument argument);
  * pdata/idata: user data that will be passed to callback
  *
  * Returns 0 if no element or no property in element, returns the
- * number of element instances otherwise. 
+ * number of element instances otherwise.
  * ---------------------------------------------------------------------- */
 long ply_set_read_cb(p_ply ply, const char *element_name, const char *property_name, p_ply_read_cb read_cb, void *pdata, long idata);
 
 /* ----------------------------------------------------------------------
  * Returns information about the element originating a callback
  *
- * argument: handle to argument 
+ * argument: handle to argument
  * element: receives a the element handle (if non-null)
- * instance_index: receives the index of the current element instance 
+ * instance_index: receives the index of the current element instance
  *     (if non-null)
  *
  * Returns 1 if successfull, 0 otherwise
@@ -117,7 +117,7 @@ int ply_get_argument_element(p_ply_argument argument, p_ply_element *element, lo
 /* ----------------------------------------------------------------------
  * Returns information about the property originating a callback
  *
- * argument: handle to argument 
+ * argument: handle to argument
  * property: receives the property handle (if non-null)
  * length: receives the number of values in this property (if non-null)
  * value_index: receives the index of current property value (if non-null)
@@ -127,7 +127,7 @@ int ply_get_argument_element(p_ply_argument argument, p_ply_element *element, lo
 int ply_get_argument_property(p_ply_argument argument, p_ply_property *property, long *length, long *value_index);
 
 /* ----------------------------------------------------------------------
- * Returns user data associated with callback 
+ * Returns user data associated with callback
  *
  * pdata: receives a copy of user custom data pointer (if non-null)
  * idata: receives a copy of user custom data integer (if non-null)
@@ -139,11 +139,11 @@ int ply_get_argument_user_data(p_ply_argument argument, void **pdata, long *idat
 /* ----------------------------------------------------------------------
  * Returns the value associated with a callback
  *
- * argument: handle to argument 
+ * argument: handle to argument
  *
  * Returns the current data item
  * ---------------------------------------------------------------------- */
-double ply_get_argument_value(p_ply_argument argument); 
+double ply_get_argument_value(p_ply_argument argument);
 
 /* ----------------------------------------------------------------------
  * Reads all elements and properties calling the callbacks defined with
@@ -218,7 +218,7 @@ p_ply_property ply_get_next_property(p_ply_element element, p_ply_property last)
  * type: receives the property type (if non-null)
  * length_type: for list properties, receives the scalar type of
  *     the length field (if non-null)
- * value_type: for list properties, receives the scalar type of the value 
+ * value_type: for list properties, receives the scalar type of the value
  *     fields  (if non-null)
  *
  * Returns 1 if successfull or 0 otherwise
@@ -230,6 +230,8 @@ int ply_get_property_info(p_ply_property property, const char** name, e_ply_type
  *
  * name: file name
  * storage_mode: file format mode
+ * error_cb: error callback function
+ * idata,pdata: contextual information available to users
  *
  * Returns handle to PLY file if successfull, NULL otherwise
  * ---------------------------------------------------------------------- */
@@ -252,7 +254,7 @@ int ply_add_element(p_ply ply, const char *name, long ninstances);
  * ply: handle returned by ply_create
  * name: name of new property
  * type: property type
- * length_type: scalar type of length field of a list property 
+ * length_type: scalar type of length field of a list property
  * value_type: scalar type of value fields of a list property
  *
  * Returns 1 if successfull, 0 otherwise
@@ -264,7 +266,7 @@ int ply_add_property(p_ply ply, const char *name, e_ply_type type, e_ply_type le
  *
  * ply: handle returned by ply_create
  * name: name of new property
- * length_type: scalar type of length field of a list property 
+ * length_type: scalar type of length field of a list property
  * value_type: scalar type of value fields of a list property
  *
  * Returns 1 if successfull, 0 otherwise
@@ -283,7 +285,7 @@ int ply_add_list_property(p_ply ply, const char *name, e_ply_type length_type, e
 int ply_add_scalar_property(p_ply ply, const char *name, e_ply_type type);
 
 /* ----------------------------------------------------------------------
- * Adds a new comment item 
+ * Adds a new comment item
  *
  * ply: handle returned by ply_create
  * comment: pointer to string with comment text
@@ -293,7 +295,7 @@ int ply_add_scalar_property(p_ply ply, const char *name, e_ply_type type);
 int ply_add_comment(p_ply ply, const char *comment);
 
 /* ----------------------------------------------------------------------
- * Adds a new obj_info item 
+ * Adds a new obj_info item
  *
  * ply: handle returned by ply_create
  * comment: pointer to string with obj_info data
@@ -316,7 +318,7 @@ int ply_write_header(p_ply ply);
  * Writes one property value, in the order they should be written to the
  * file. For each element type, write all elements of that type in order.
  * For each element, write all its properties in order. For scalar
- * properties, just write the value. For list properties, write the length 
+ * properties, just write the value. For list properties, write the length
  * and then each of the values.
  *
  * ply: handle returned by ply_create
@@ -328,7 +330,7 @@ int ply_write(p_ply ply, double value);
 /* ----------------------------------------------------------------------
  * Closes a PLY file handle. Releases all memory used by handle
  *
- * ply: handle to be closed. 
+ * ply: handle to be closed.
  *
  * Returns 1 if successfull, 0 otherwise
  * ---------------------------------------------------------------------- */
@@ -341,7 +343,7 @@ int ply_close(p_ply ply);
 #endif /* RPLY_H */
 
 /* ----------------------------------------------------------------------
- * Copyright (C) 2003-2011 Diego Nehab. All rights reserved.
+ * Copyright (C) 2003-2015 Diego Nehab. All rights reserved.
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
